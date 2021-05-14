@@ -11,7 +11,7 @@
   ],
   "enableProposedApi": true,
   "activationEvents": [
-    "onNotebook:test-notebook-renderer"
+    "onNotebook:javascript-notebook"
   ],
   "main": "./out/extension/extension.js",
   "contributes": {
@@ -27,8 +27,8 @@
     ],
     "notebookProvider": [
       {
-        "viewType": "test-notebook-renderer",
-        "displayName": "Sample Notebook",
+        "viewType": "javascript-notebook",
+        "displayName": "Javascript Notebook",
         "selector": [
           {
             "filenamePattern": "*.javascript-notebook"

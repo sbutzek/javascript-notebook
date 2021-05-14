@@ -4,13 +4,15 @@ import * as vscode from 'vscode';
 
 import { SampleContentSerializer, SampleKernel } from './sampleProvider';
 
+export var javascript: string[] = [];
+
 // This method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
   
   context.subscriptions.push(
     vscode.notebook.registerNotebookSerializer(
-      'test-notebook-renderer', new SampleContentSerializer()
+      'javascript-notebook', new SampleContentSerializer()
     ),
     new SampleKernel()
   );

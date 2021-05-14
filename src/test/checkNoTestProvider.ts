@@ -67,11 +67,11 @@ const checkNotInExtensionTs = () => {
 const checkNotInPackageJson = () => {
   const providers = packageJson.contributes?.notebookProvider ?? [];
   const testIndex = providers.findIndex(
-    (p: { viewType: string }) => p.viewType === 'test-notebook-renderer',
+    (p: { viewType: string }) => p.viewType === 'javascript-notebook',
   );
   if (testIndex !== -1) {
     throw new DetectedError(
-      `The "test-notebook-renderer" is still registered in the contributes section of your package.json.`,
+      `The "javascript-notebook" is still registered in the contributes section of your package.json.`,
       () => {
         providers.splice(testIndex, 1);
         writeFileSync(

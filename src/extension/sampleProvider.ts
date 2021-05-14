@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { TextDecoder, TextEncoder } from "util";
+import { javascript } from './extension';
 
 /**
  * An ultra-minimal sample provider that lets the user type in JSON, and then
@@ -7,6 +8,7 @@ import { TextDecoder, TextEncoder } from "util";
  */
 
 interface RawNotebookData {
+  javascript: string[],
   cells: RawNotebookCell[]
 }
 
@@ -37,8 +39,10 @@ export class SampleContentSerializer implements vscode.NotebookSerializer {
     try {
       raw = <RawNotebookData>JSON.parse(contents);
     } catch {
-      raw = { cells: [] };
+      raw = { javascript: [], cells: [] };
     }
+
+    // setJavascript(raw.javascript);
 
     // Create array of Notebook cells for the VS Code API from file contents
     const cells = raw.cells.map(item => new vscode.NotebookCellData(
@@ -72,7 +76,7 @@ export class SampleContentSerializer implements vscode.NotebookSerializer {
     }
 
     // Map the Notebook data into the format we want to save the Notebook data as
-    let contents: RawNotebookData = { cells: []};
+    let contents: RawNotebookData = { javascript: javascript, cells: []};
 
     for (const cell of data.cells) {
       contents.cells.push({
@@ -89,9 +93,9 @@ export class SampleContentSerializer implements vscode.NotebookSerializer {
 }
 
 export class SampleKernel {
-  readonly id = 'test-notebook-renderer-kernel';
+  readonly id = 'javascript-notebook-kernel';
   public readonly label = 'Sample Notebook Kernel';
-  readonly supportedLanguages = ['json'];
+  readonly supportedLanguages = ['javascript', 'json'];
 
   private _executionOrder = 0;
   private readonly _controller: vscode.NotebookController;
@@ -99,7 +103,7 @@ export class SampleKernel {
   constructor() {
 
     this._controller = vscode.notebook.createNotebookController(this.id,
-                                                                'test-notebook-renderer',
+                                                                'javascript-notebook',
                                                                 this.label);
 
     this._controller.supportedLanguages = this.supportedLanguages;
@@ -129,7 +133,7 @@ export class SampleKernel {
 
     try {
       execution.replaceOutput([new vscode.NotebookCellOutput([
-        new vscode.NotebookCellOutputItem('application/json', JSON.parse(cell.document.getText())),
+        new vscode.NotebookCellOutputItem('application/x.notebook.stdout', cell.document.getText()),
       ], metadata)]);
 
       execution.end({ success: true });
