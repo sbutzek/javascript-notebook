@@ -133,7 +133,7 @@ export class SampleKernel {
 
     try {
       execution.replaceOutput([new vscode.NotebookCellOutput([
-        new vscode.NotebookCellOutputItem('application/x.notebook.stdout', eval(cell.document.getText())),
+        new vscode.NotebookCellOutputItem('application/x.notebook.stdout', this.evaluateInput(cell)),
       ], metadata)]);
 
       execution.end({ success: true });
@@ -147,5 +147,12 @@ export class SampleKernel {
       ])]);
       execution.end({ success: false });
     }
+  }
+
+  private evaluateInput(cell: vscode.NotebookCell) {
+    if (cell.document.languageId === 'javascript') {
+      return eval(cell.document.getText());
+    } 
+    return JSON.parse(cell.document.getText());
   }
 }
