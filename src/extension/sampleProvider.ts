@@ -133,7 +133,7 @@ export class SampleKernel {
 
     try {
       execution.replaceOutput([new vscode.NotebookCellOutput([
-        new vscode.NotebookCellOutputItem('application/x.notebook.stdout', cell.document.getText()),
+        new vscode.NotebookCellOutputItem('application/x.notebook.stdout', eval(cell.document.getText())),
       ], metadata)]);
 
       execution.end({ success: true });
